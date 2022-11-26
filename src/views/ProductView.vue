@@ -170,7 +170,7 @@
             return {
                 id: this.$route.params.id,
                 product: [],
-                quantity: '',
+                quantity: 1,
 				cart: new Map()
             }
         },
@@ -191,27 +191,46 @@
 				this.updateStorage();
 			},
 			updateStorage(){
-				this.product.quantityCar = this.quantity;
-				this.cart.set(this.product._id, this.product);
-				window.localStorage.setItem('cart', JSON.stringify(this.cartList));
-				this.alertSuccess('Producto Agregado al Carrito');
-				this.cart.delete(this.product._id);
-				router.push({
-					name: 'productos',
-				});
+				if (this.quantity > 0) {
+					this.product.quantityCar = this.quantity;
+					this.cart.set(this.product._id, this.product);
+					window.localStorage.setItem('cart', JSON.stringify(this.cartList));
+					this.alertSuccess('Producto Agregado al Carrito');
+					this.cart.delete(this.product._id);
+					router.push({
+						name: 'productos',
+					});
+				}else if(this.quantity < 1){
+					this.alertError('Selecciona una cantidad valida.');
+				}else{
+					this.alertError('Selecciona una cantidad.');
+				}
 			},
 			alertSuccess(message) {
-			createToast(message,
-				{
-					timeout: 3000,
-					hideProgressBar: 'true',
-					position: 'top-right',
-					type: 'success',
-					transition: 'bounce',
-					showIcon: 'true',
-				}
-			);
-		},
+				createToast(message,
+					{
+						timeout: 3000,
+						hideProgressBar: 'true',
+						position: 'top-right',
+						type: 'success',
+						transition: 'bounce',
+						showIcon: 'true',
+					}
+				);
+			},
+			alertError(message) {
+				createToast(message,
+					{
+						timeout: 3000,
+						toastBackgroundColor: '#c00000',
+						hideProgressBar: 'true',
+						position: 'top-right',
+						type: 'danger',
+						transition: 'bounce',
+						showIcon: 'true',
+					}
+				);
+			},
 		},
 		computed: {
 			cartList(){

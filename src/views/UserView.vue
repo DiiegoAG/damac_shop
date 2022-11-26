@@ -23,48 +23,54 @@
                 <div class="col-lg-8 posts-list" v-if="estadoCompras">
                     <h1>Mi Historial de Compras</h1>
                     <br><br>
-                    <div class="table-responsive" v-for="purchase, $index in purchases" :key="$index">
-                        <h3>Mi Compra No. {{$index + 1}}</h3>
-                        <table class="table">
-                            <thead>
-                                <tr class="alinear-arriba">
-                                    <th scope="col">
-                                        <h5 class="orange-color">Fecha: <span class="black-color">{{purchase.date}}</span></h5>
-                                    </th>
-                                    <th scope="col">
-                                        <h5 class="orange-color">Total: <span class="black-color">${{purchase.total}}</span></h5>
-                                        <h5 class="green-color">Descuento: <span class="black-color">${{purchase.discount}}</span></h5>
-                                    </th>
-                                    <th scope="col">
-                                        <h5 class="orange-color">Enviado a: <span class="black-color">{{purchase.address}}</span></h5>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody v-for="product, $index2 in purchase.products" :key="$index2">
-                                <tr>
-                                    <td>
-                                        <div class="media">
-                                            <div class="d-flex">
-                                                <img class="product-listed" :src="product.idProduct.gallery[0]" alt="">
+                    <div v-if="purchases.length > 0">
+                        <div class="table-responsive" v-for="purchase, $index in purchases" :key="$index">
+                            <h3>Mi Compra No. {{$index + 1}}</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr class="alinear-arriba">
+                                        <th scope="col">
+                                            <h5 class="orange-color">Fecha: <span class="black-color">{{purchase.date}}</span></h5>
+                                        </th>
+                                        <th scope="col">
+                                            <h5 class="orange-color">Total: <span class="black-color">${{purchase.total}}</span></h5>
+                                            <h5 class="green-color">Descuento: <span class="black-color">${{purchase.discount}}</span></h5>
+                                        </th>
+                                        <th scope="col">
+                                            <h5 class="orange-color">Enviado a: <span class="black-color">{{purchase.address}}</span></h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="product, $index2 in purchase.products" :key="$index2">
+                                    <tr>
+                                        <td>
+                                            <div class="media">
+                                                <div class="d-flex">
+                                                    <img class="product-listed" :src="product.idProduct.gallery[0]" alt="">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="media-body">
-                                            <br>
-                                            <h5>{{product.idProduct.name}}</h5>
-                                            <br>
-                                            <h6><strong>Precio:</strong> ${{product.idProduct.price}}</h6>
-                                            <h6><strong>Cantidad:</strong> {{product.quantity}}</h6>
-                                        </div>
-                                    </td>
-                                    <td class="buy-container">
-                                        <router-link :to="'/producto/' + product.idProduct._id"><button class="buy_again">Comprar de Nuevo</button></router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br><br>
+                                        </td>
+                                        <td>
+                                            <div class="media-body">
+                                                <br>
+                                                <h5>{{product.idProduct.name}}</h5>
+                                                <br>
+                                                <h6><strong>Precio:</strong> ${{product.idProduct.price}}</h6>
+                                                <h6><strong>Cantidad:</strong> {{product.quantity}}</h6>
+                                            </div>
+                                        </td>
+                                        <td class="buy-container">
+                                            <router-link :to="'/producto/' + product.idProduct._id"><button class="buy_again">Comprar de
+                                                    Nuevo</button></router-link>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <h3>Por el momento no tienes compras registradas.</h3>
                     </div>
                 </div>
                 <!-- Detalles de la Cuenta -->
@@ -157,38 +163,45 @@
                     </div>
                     <br><br>
                     <hr>
-                    <div class="row" v-for="card, $index in cards" :key="$index">
-                        <h3>Tarjeta No. {{$index + 1}}</h3>
-                        <form class="row contact_form">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <p>Número de Tarjeta</p>
-                                    <input type="text" v-model="card.number" class="form-control" ç>
-                                    <br>
-                                    <p>CVV</p>
-                                    <input type="password" class="form-control" v-model="card.cvv" placeholder="XXX" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'XXX'">
+                    <div v-if="cards.length > 0">
+                        <div class="row" v-for="card, $index in cards" :key="$index">
+                            <h3>Tarjeta No. {{$index + 1}}</h3>
+                            <form class="row contact_form">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <p>Número de Tarjeta</p>
+                                        <input type="text" v-model="card.number" class="form-control" ç>
+                                        <br>
+                                        <p>CVV</p>
+                                        <input type="password" class="form-control" v-model="card.cvv" placeholder="XXX"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'XXX'">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <p>Nombre en la Tarjeta</p>
-                                    <input type="text" class="form-control" v-model="card.name" placeholder="Charlie Barber" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'Charlie Barber'">
-                                    <br>
-                                    <p>Fecha de Expiración</p>
-                                    <input type="text" class="form-control" v-model="card.expires_date" placeholder="12/25" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = '12/25'">
-                                    <br>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <p>Nombre en la Tarjeta</p>
+                                        <input type="text" class="form-control" v-model="card.name" placeholder="Charlie Barber"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Charlie Barber'">
+                                        <br>
+                                        <p>Fecha de Expiración</p>
+                                        <input type="text" class="form-control" v-model="card.expires_date" placeholder="12/25"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = '12/25'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 align-mid">
-                                <button class="primary-btn third-color col-md-6" v-on:click.prevent="updateCard($index)">Actualizar Datos</button>
-                                <button class="primary-btn second-color col-md-6" v-on:click.prevent="deleteCard(card._id)">Eliminar Tarjeta</button>
-                            </div>
-                        </form>
-                        <br>
-                        <br>
+                                <div class="col-md-12 align-mid">
+                                    <button class="primary-btn third-color col-md-6" v-on:click.prevent="updateCard($index)">Actualizar
+                                        Datos</button>
+                                    <button class="primary-btn second-color col-md-6" v-on:click.prevent="deleteCard(card._id)">Eliminar
+                                        Tarjeta</button>
+                                </div>
+                            </form>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <h3>Por el momento no tienes tarjetas registradas.</h3>
                     </div>
                 </div>
                 <!-- Direcciones de Envio -->
@@ -262,65 +275,81 @@
                     <br>
                     <br>
                     <hr>
-                    <div class="row" v-for="address, $index in addresses" :key="$index">
-                        <h3>Dirección No. {{$index + 1}}</h3>
-                        <br>
-                        <form class="row contact_form">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <p>Alias de la Dirección</p>
-                                    <input type="text" class="form-control" v-model="address.alias" placeholder="Alias de la Dirección" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Alias de la Dirección'">
-                                    <br>
+                    <div v-if="addresses.length > 0">
+                        <div class="row" v-for="address, $index in addresses" :key="$index">
+                            <h3>Dirección No. {{$index + 1}}</h3>
+                            <br>
+                            <form class="row contact_form">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <p>Alias de la Dirección</p>
+                                        <input type="text" class="form-control" v-model="address.alias" placeholder="Alias de la Dirección"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Alias de la Dirección'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <p>Estado</p>
-                                    <input type="text" class="form-control" v-model="address.state" placeholder="Estado" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Estado'">
-                                    <br>
-                                    <p>Ciudad</p>
-                                    <input type="text" class="form-control" v-model="address.city" placeholder="Ciudad" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ciudad'">
-                                    <br>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <p>Estado</p>
+                                        <input type="text" class="form-control" v-model="address.state" placeholder="Estado"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Estado'">
+                                        <br>
+                                        <p>Ciudad</p>
+                                        <input type="text" class="form-control" v-model="address.city" placeholder="Ciudad"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ciudad'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <p>Colonia</p>
-                                    <input type="text" class="form-control" v-model="address.suburb" placeholder="Colonia" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Colonia'">
-                                    <br>
-                                    <p>Calle</p>
-                                    <input type="text" class="form-control" v-model="address.street" placeholder="Calle" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Calle'">
-                                    <br>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <p>Colonia</p>
+                                        <input type="text" class="form-control" v-model="address.suburb" placeholder="Colonia"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Colonia'">
+                                        <br>
+                                        <p>Calle</p>
+                                        <input type="text" class="form-control" v-model="address.street" placeholder="Calle"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Calle'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <p>Número Exterior o Interior</p>
-                                    <input type="text" class="form-control" v-model="address.number" placeholder="Número Exterior / Interior" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Número Exterior / Interior'">
-                                    <br>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <p>Número Exterior o Interior</p>
+                                        <input type="text" class="form-control" v-model="address.number"
+                                            placeholder="Número Exterior / Interior" onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = 'Número Exterior / Interior'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <p>Código Postal</p>
-                                    <input type="number" class="form-control" v-model="address.cp" placeholder="Código Postal" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Código Postal'">
-                                    <br>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <p>Código Postal</p>
+                                        <input type="number" class="form-control" v-model="address.cp" placeholder="Código Postal"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Código Postal'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <p>Teléfono</p>
-                                    <input type="number" class="form-control" v-model="address.phone" placeholder="Teléfono" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Teléfono'">
-                                    <br>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <p>Teléfono</p>
+                                        <input type="number" class="form-control" v-model="address.phone" placeholder="Teléfono"
+                                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Teléfono'">
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12 align-mid">
-                                <button class="primary-btn third-color col-md-6" v-on:click.prevent="updateAddress($index)">Actualizar Datos</button>
-                                <button class="primary-btn second-color col-md-6" v-on:click.prevent="deleteAddress(address._id)">Eliminar Dirección</button>
-                            </div>
-                        </form>
-                        <br>
-                        <br>
+                                <div class="col-md-12 align-mid">
+                                    <button class="primary-btn third-color col-md-6" v-on:click.prevent="updateAddress($index)">Actualizar
+                                        Datos</button>
+                                    <button class="primary-btn second-color col-md-6"
+                                        v-on:click.prevent="deleteAddress(address._id)">Eliminar Dirección</button>
+                                </div>
+                            </form>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <h3>Por el momento no tienes tarjetas registradas.</h3>
                     </div>
                 </div>
                 <!-- Right Area - Perfil Info -->

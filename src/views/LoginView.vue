@@ -82,26 +82,30 @@ export default {
 	},
 	methods: {
 		checkUser (){
-			userService.check(this.email, this.password).then(res => {
-				console.log(res.data.token);
-				console.log(VueJwtDecode.decode(res.data.token));
-				this.email = '';
-				this.password = '';
-				window.localStorage.setItem('tkn', res.data.token);
-				router.push({
-					name: 'admin',
+			if (this.email && this.password) {
+				userService.check(this.email, this.password).then(res => {
+					console.log(res.data.token);
+					console.log(VueJwtDecode.decode(res.data.token));
+					this.email = '';
+					this.password = '';
+					window.localStorage.setItem('tkn', res.data.token);
+					router.push({
+						name: 'admin',
+					});
+				}).catch(error => {
+					if (error.response.data == "User not found") {
+						this.alertWarning('Correo incorrecto');
+					}
+					else if (error.response.data == "Password is wrong!") {
+						this.alertWarning('Contraseña incorrecta');
+					}
+					else {
+						this.alertError('Correo o Contraseña incorrectos');
+					}
 				});
-			}).catch(error => {
-				if(error.response.data == "User not found"){
-					this.alertWarning('Correo incorrecto');
-				}
-				else if(error.response.data == "Password is wrong!"){
-					this.alertWarning('Contraseña incorrecta');
-				}
-				else{
-					this.alertError('Correo o Contraseña incorrectos');
-				}
-			});
+			}else {
+				this.alertError('Falta llenar algún campo');
+			}
 		},
 		alertError(message) {
 			createToast(message,

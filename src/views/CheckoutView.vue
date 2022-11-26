@@ -22,28 +22,24 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <!-- Detalles Personales -->
-                        <h2>Detalles Personales</h2>
+                        <h2>Detalles del Receptor</h2>
                         <br>
                         <form class="row contact_form">
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" placeholder="Nombres" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Nombres'">
+                                <input type="text" class="form-control" v-model="name" placeholder="Nombre Completo" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Nombre Completo'">
                             </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" placeholder="Apellidos" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Apellidos'">
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" placeholder="Compañía" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Compañía'">
+                                <input type="text" class="form-control" placeholder="Compañía (Opcional)" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Compañía (Opcional)'">
                             </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" placeholder="Teléfono" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Teléfono'">
+                                <input type="text" class="form-control" placeholder="Teléfono (Opcional)" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Teléfono (Opcional)'">
                             </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" placeholder="Correo" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Correo'">
+                                <input type="text" class="form-control" placeholder="Correo de Facturacíon (Opcional)" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Correo de Facturacíon (Opcional)'">
                             </div>
                         </form>
                         <br>
@@ -115,7 +111,7 @@
                             </div>
                             <div class="col-md-12 form-group">
                                 <div class="creat_account">
-                                    <input type="checkbox" v-model="saveAddress"> ¿Guardar Dirección?
+                                    <span v-if="isLogged"><input type="checkbox" v-model="saveAddress"> ¿Guardar Dirección?</span>
                                 </div>
                             </div>
                         </form>
@@ -165,7 +161,7 @@
                             </div>
                             <div class="col-md-12 form-group">
                                 <div class="creat_account">
-                                    <input type="checkbox" v-model="saveCard"> ¿Guardar Tarjeta?
+                                    <span v-if="isLogged"><input type="checkbox" v-model="saveCard"> ¿Guardar Tarjeta?</span>
                                 </div>
                             </div>
                         </form>
@@ -222,6 +218,7 @@
 </template>
 
 <script>
+import router from '@/router';
 import VueJwtDecode from 'vue-jwt-decode'
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css'
@@ -256,7 +253,8 @@ export default {
                 cvv: null,
                 expires_date: null
             },
-            saveCard: false
+            saveCard: false,
+            name: null
         }
     },
     created() {
@@ -316,12 +314,12 @@ export default {
             }
             if (this.cardSelected == 0 || this.cardSelected === null){
                 if(this.newCard.number > 0){
-                    this.cardSelected = this.newAddress.number;
+                    this.cardSelected = this.newCard.number;
                 }else{
                     this.alertError('Falta ingresar una Tarjeta');
                 }
             }
-            if (this.cardSelected > 0 && !this.addressSelected == ""){
+            if (this.cardSelected > 0 && !this.addressSelected == "" && this.name) {
                 const productsToSend = [];
                 this.cart.forEach(pr => {
                     productsToSend.push({
@@ -329,12 +327,29 @@ export default {
                         quantity: pr.quantityCar
                     })
                 });
-                const tiempoTranscurrido = new Date().toLocaleDateString('es-MX', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
-                purchaseService.newPurchase(VueJwtDecode.decode(window.localStorage.getItem('tkn')).userId, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(()=>{
-                    this.alertSuccess('Compra Realizada Correctamente');
-                    this.clearAllData();
-                    
-                });
+                if (window.localStorage.getItem('tkn')) {
+                    const tiempoTranscurrido = new Date().toLocaleDateString('es-MX', { weekday: "long", year: "numeric", month: "short", day: "numeric" });
+                    purchaseService.newPurchase(VueJwtDecode.decode(window.localStorage.getItem('tkn')).userId, this.name, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(res => {
+                        this.alertSuccess('Compra Realizada Correctamente');
+                        this.clearAllData();
+                        router.push({
+                            name: 'confirmacion',
+                            params: { id: res.data._id }
+                        });
+                    });
+                } else {
+                    const tiempoTranscurrido = new Date().toLocaleDateString('es-MX', { weekday: "long", year: "numeric", month: "short", day: "numeric" });
+                    purchaseService.newPurchaseNameless(this.name, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(res => {
+                        this.alertSuccess('Compra Realizada Correctamente');
+                        this.clearAllData();
+                        router.push({
+                            name: 'confirmacion',
+                            params: { id: res.data._id }
+                        });
+                    });
+                }
+            } else{
+                this.alertError('Falta ingresar Nombre del Receptor');
             }
         },
         clearAllData(){

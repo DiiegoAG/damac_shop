@@ -4,10 +4,10 @@
 		<div class="container">
 			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 				<div class="col-first">
-					<h1>Confirmation</h1>
+					<h1>Confirmación de Pedido</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Confirmation</a>
+						<router-link to="/">Inicio<span class="lnr lnr-arrow-right"></span></router-link>
+                        <router-link to="/productos">Productos</router-link>
 					</nav>
 				</div>
 			</div>
@@ -18,118 +18,51 @@
 	<!--================Order Details Area =================-->
 	<section class="order_details section_gap">
 		<div class="container">
-			<h3 class="title_confirmation">Thank you. Your order has been received.</h3>
+			<h3 class="title_confirmation">Gracias por tu compra!, Tu orden ha sido recibida 💪🏻.</h3>
 			<div class="row order_d_inner">
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div class="details_item">
-						<h4>Order Info</h4>
+						<h4>Información de la Compra</h4>
 						<ul class="list">
-							<li><a href="#"><span>Order number</span> : 60235</a></li>
-							<li><a href="#"><span>Date</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Total</span> : USD 2210</a></li>
-							<li><a href="#"><span>Payment method</span> : Check payments</a></li>
+							<li><strong>ID de rastreo: </strong>{{purchaseInfo._id}}</li>
+							<li><strong>Fecha de Compra: </strong>{{purchaseInfo.date}}</li>
+							<li><strong>Total: </strong>${{purchaseInfo.total}}</li>
+							<li><strong>Descuento: </strong>${{purchaseInfo.discount}}</li>
+							<li><strong>Pagado con Tarjeta con Terminación: </strong>*******{{cardNumberHidden}}</li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 					<div class="details_item">
-						<h4>Billing Address</h4>
+						<h4>Información de Envio</h4>
 						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<div class="details_item">
-						<h4>Shipping Address</h4>
-						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
+							<li><strong>Nombre del Receptor: </strong>{{purchaseInfo.name}}</li>
+							<li><strong>Dirección de Envio: </strong>{{purchaseInfo.address}}</li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div class="order_details_table">
-				<h2>Order Details</h2>
+				<h2>Detalles del Pedido</h2>
 				<div class="table-responsive">
 					<table class="table">
 						<thead>
 							<tr>
-								<th scope="col">Product</th>
-								<th scope="col">Quantity</th>
+								<th scope="col">Producto</th>
+								<th scope="col">Cantidad</th>
 								<th scope="col">Total</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<tr v-for="product, index in purchaseInfo.products" :key="index">
 								<td>
-									<p>Pixelstore fresh Blackberry</p>
+									<p>{{product.idProduct.name}}</p>
 								</td>
 								<td>
-									<h5>x 02</h5>
+									<h5>x {{product.quantity}}</h5>
 								</td>
 								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>Pixelstore fresh Blackberry</p>
-								</td>
-								<td>
-									<h5>x 02</h5>
-								</td>
-								<td>
-									<p>$720.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Subtotal</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2160.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Shipping</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>Flat rate: $50.00</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<h4>Total</h4>
-								</td>
-								<td>
-									<h5></h5>
-								</td>
-								<td>
-									<p>$2210.00</p>
+									<p>${{product.idProduct.price}}</p>
 								</td>
 							</tr>
 						</tbody>
@@ -140,3 +73,46 @@
 	</section>
 	<!--================End Order Details Area =================-->
 </template>
+
+<script>
+import purchaseService from '@/services/purchaseService';
+
+export default {
+	data() {
+		return {
+			purchaseInfo: []
+		}
+	},
+	computed: {
+		cardNumberHidden(){
+			var hidden = '';
+			hidden = this.purchaseInfo.cardNumber?.toString();
+			hidden = hidden?.slice(-4);
+			return hidden;
+		}
+	},	
+	created() {
+		purchaseService.getOnePurchase(this.$route.params.id).then(res => {
+			this.purchaseInfo = res.data;
+		})
+	},
+}
+</script>
+
+<style scoped>
+.order_details .title_confirmation {
+    text-align: center;
+    color: #d65a31;
+    font-size: 30px;
+    margin-bottom: 80px;
+}
+b, strong {
+    font-weight: 600;
+    color: #d65a31;
+}
+.order_d_inner .details_item .list li {
+    margin-bottom: 8px;
+    color: black;
+    font-size: 15px;
+}
+</style>

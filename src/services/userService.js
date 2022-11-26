@@ -15,5 +15,8 @@ export default {
     updateInfo(id, data, token){
         console.log('Name: ' + data);
         return Service.patch(resource + '/' + id, data, { headers: {"Authorization" : `Bearer ${token}`} });
+    },
+    createUser(data){
+        return Service.post(resource + '/register', data);
     }
 }
