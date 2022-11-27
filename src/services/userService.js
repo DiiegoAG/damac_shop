@@ -18,5 +18,14 @@ export default {
     },
     createUser(data){
         return Service.post(resource + '/register', data);
+    },
+    getAllUsers(token){
+        return Service.get(resource + '/', { headers: {"Authorization" : `Bearer ${token}`} });
+    },
+    deleteUser(id, token){
+        return Service.delete(resource + '/' + id, { headers: {"Authorization" : `Bearer ${token}`} });
+    },
+    patchUserToAdmin(id, admin, token){
+        return Service.patch(resource + '/' + id, {isAdmin: admin}, { headers: {"Authorization" : `Bearer ${token}`} });
     }
 }

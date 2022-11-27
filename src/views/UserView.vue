@@ -352,6 +352,231 @@
                         <h3>Por el momento no tienes tarjetas registradas.</h3>
                     </div>
                 </div>
+                <!-- Administración de Usuarios -->
+                <div class="col-lg-8 posts-list" v-if="estadoUsuarios">
+                    <br><br>
+                    <h1>Buscar Usuario</h1>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="text" v-model="userToSearch" class="form-control" placeholder="Nombre del Usuario" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Nombre del Usuario'">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div v-for="user, index in userFiltered" :key="index">
+                        <div class="row blog_right_sidebar middle" >
+                        <div class="col-lg-4 col-md-4 col-sm-12 midd">
+                            <img class="avatars-user" :src="user.avatarId" alt="">
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-12">
+                            <h3>{{user.name}}</h3>
+                            <p>ID Usuario: {{user._id}}</p>
+                            <p>Correo: {{user.email}}</p>
+                            <p>Teléfono: {{user.phone}}</p>
+                            <span v-if="personalData._id!=user._id"><input type="checkbox" v-model="user.isAdmin" v-on:click="patchUserToAdmin(user._id, user.isAdmin)"> ¿Administrador?</span>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 midd">
+                            <button class="delete-user-btn" v-on:click.prevent="deleteUser(user._id)"><span class="ti-trash ico-trash" > Eliminar Usuario</span></button>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    </div>
+                </div>
+                <!-- Administración de Productos -->
+                <div class="col-lg-8 posts-list" v-if="estadoProductos">
+                    <br><br>
+                    <h1>Administración de Productos</h1>
+                    <br>
+                    <button class="blue_btn" v-on:click="agregarProducto=true">Agregar Producto</button>
+                    <br><br>
+                    <!-- Nuevo producto form -->
+                    <div v-if="agregarProducto">
+                        <div class="row blog_right_sidebar middle">
+                            <div class="col-lg-4 col-md-4 col-sm-12 midd-product-center">
+                                <img class="avatars-user" :src="newProduct.gallery[0]" alt="">
+                                <br>
+                                <br>
+                                <input type="text" class="form-control" v-model="newProduct.gallery[0]"
+                                    placeholder="Primera imagen del producto" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Primera imagen del producto'">
+                                <br>
+                                <br>
+                                <input type="text" class="form-control" v-model="newProduct.gallery[1]"
+                                    placeholder="Primera imagen del producto" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Primera imagen del producto'">
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" v-model="newProduct.name" placeholder="Nombre del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del producto'">
+                                <br>
+                                <label>Descripción</label>
+                                <input type="text" class="form-control" v-model="newProduct.description"
+                                    placeholder="Descripción del producto" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Descripción del producto'">
+                                <br>
+                                <label>Precio</label>
+                                <input type="number" class="form-control" v-model="newProduct.price" placeholder="Precio del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Precio del producto'">
+                                <br>
+                                <label>Categoría</label>
+                                <select class="form-control" v-model="newProduct.category">
+                                    <option v-for="category, $index in productsCategories" :key="$index" :value="category._id">
+                                        {{category.name}}</option>
+                                </select>
+                                <a href="" v-on:click.prevent="agregarCategoria = true">Agregar Nueva Categoría</a>
+                                <br>
+                                <div v-if="agregarCategoria">
+                                    <input type="text" class="form-control" v-model="newCategory" placeholder="Nombre de la Categoría"
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre de la Categoría'">
+                                    <br>
+                                    <button class="delete-user-btn full" v-on:click="createCategory()">Agregar Categoría</button>
+                                    <br>
+                                    <br>
+                                    <button class="update-product-btn full" v-on:click="agregarCategoria=false">Cancelar</button>
+                                    <br>
+                                </div>
+                                <label>Sabor</label>
+                                <input type="text" class="form-control" v-model="newProduct.flavor" placeholder="Sabor del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Sabor del producto'">
+                                <br>
+                                <label>Medida (kg, lb, ml)</label>
+                                <input type="text" class="form-control" v-model="newProduct.measure" placeholder="Medida del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Medida del producto'">
+                                <br>
+                                <label>Cantidad del contenido</label>
+                                <input type="number" class="form-control" v-model="newProduct.quantity" placeholder="Cantidad del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cantidad del producto'">
+                                <br>
+                                <label>Presentación del producto</label>
+                                <input type="text" class="form-control" v-model="newProduct.filing" placeholder="Presentación del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Presentación del producto'">
+                                <br>
+                                <label>Marca</label>
+                                <select class="form-control" v-model="newProduct.brand">
+                                    <option v-for="brand, $index in productsBrands" :key="$index" :value="brand._id">{{brand.name}}
+                                    </option>
+                                </select>
+                                <a href="" v-on:click.prevent="agregarMarca = true">Agregar Nueva Marca</a>
+                                <br>
+                                <div v-if="agregarMarca">
+                                    <input type="text" class="form-control" v-model="newBrand" placeholder="Nombre de la Marca"
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre de la Marca'">
+                                    <br>
+                                    <button class="delete-user-btn full" v-on:click="createBrand()">Agregar Marca</button>
+                                    <br>
+                                    <br>
+                                    <button class="update-product-btn full" v-on:click="agregarMarca=false">Cancelar</button>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 midd-product">
+                                <br>
+                                <button class="delete-user-btn" v-on:click="createProduct()"> Agregar Producto</button>
+                                        <br>
+                                <button class="update-product-btn" v-on:click="agregarProducto=false"> Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <h3>Buscar un Producto</h3>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" v-model="productToSearch" placeholder="Nombre del Producto"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del Producto'">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <!-- Formulario de vista de productos -->
+                    <div v-for="product, index in productFiltered" :key="index">
+                        <div class="row blog_right_sidebar middle">
+                            <div class="col-lg-4 col-md-4 col-sm-12 midd-product-center">
+                                <img class="avatars-user" :src="product.gallery[0]" alt="">
+                                <br>
+                                <br>
+                                <div v-for="photo, num in product.gallery" :key="num">
+                                    <input type="text" class="form-control" v-model="product.gallery[num]"
+                                        placeholder="Primera imagen del producto" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Primera imagen del producto'">
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" v-model="product.name" placeholder="Nombre del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del producto'">
+                                <br>
+                                <label>Descripción</label>
+                                <input type="text" class="form-control" v-model="product.description"
+                                    placeholder="Descripción del producto" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Descripción del producto'">
+                                <br>
+                                <label>Precio</label>
+                                <input type="text" class="form-control" v-model="product.price" placeholder="Precio del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Precio del producto'">
+                                <br>
+                                <label>Categoría</label>
+                                <select class="form-control" v-model="product.category._id">
+                                    <option v-for="category, $index in productsCategories" :key="$index" :value="category._id">
+                                        {{category.name}}</option>
+                                </select>
+                                <br>
+                                <label>Sabor</label>
+                                <input type="text" class="form-control" v-model="product.flavor" placeholder="Sabor del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Sabor del producto'">
+                                <br>
+                                <label>Medida (kg, lb, ml)</label>
+                                <input type="text" class="form-control" v-model="product.measure" placeholder="Medida del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Medida del producto'">
+                                <br>
+                                <label>Cantidad del contenido</label>
+                                <input type="text" class="form-control" v-model="product.quantity" placeholder="Cantidad del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Cantidad del producto'">
+                                <br>
+                                <label>Presentación del producto</label>
+                                <input type="text" class="form-control" v-model="product.filing" placeholder="Presentación del producto"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Presentación del producto'">
+                                <br>
+                                <label>Marca</label>
+                                <select class="form-control" v-model="product.brand._id">
+                                    <option v-for="brand, $index in productsBrands" :key="$index" :value="brand._id">{{brand.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 midd-product">
+                                <br>
+                                <button class="update-product-btn"><span class="fa fa-cart-arrow-down" v-on:click.prevent="updateProduct(product._id, 
+                                                            product.name,
+                                                            product.description, 
+                                                            product.price, 
+                                                            product.available_items, 
+                                                            product.available, product.flavor, 
+                                                            product.measure, product.quantity, 
+                                                            product.filing, product.brand._id, 
+                                                            product.category._id, 
+                                                            product.gallery)"> Actualizar Producto</span></button>
+                                <br>
+                                <button class="delete-user-btn"><span class="ti-trash ico-trash"
+                                        v-on:click="deleteProduct(product._id)"> Eliminar Producto</span></button>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                <!-- Reportes -->
+                <div class="col-lg-8 posts-list" v-if="estadoReportes">
+                    <br><br>
+                    <h1>Reportes</h1>
+                    <br>
+                </div>
                 <!-- Right Area - Perfil Info -->
                 <div class="col-lg-4">
                     <div class="blog_right_sidebar">
@@ -396,6 +621,30 @@
                                     </a>
                                 </div>
                             </div>
+                            <div class="media post_item" v-if="personalData.isAdmin">
+                                <img class="user-ico-img" src="@/assets/img/user/users.png" alt="post">
+                                <div class="media-body">
+                                    <a href="" v-on:click.prevent="mostrarUsuarios">
+                                        <h3>Administración de Usuarios</h3>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="media post_item" v-if="personalData.isAdmin">
+                                <img class="user-ico-img" src="@/assets/img/user/products.png" alt="post">
+                                <div class="media-body">
+                                    <a href="" v-on:click.prevent="mostrarProductos">
+                                        <h3>Administración de Productos</h3>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="media post_item" v-if="personalData.isAdmin">
+                                <img class="user-ico-img" src="@/assets/img/user/reports.png" alt="post">
+                                <div class="media-body">
+                                    <a href="" v-on:click.prevent="mostrarReportes">
+                                        <h3>Reportes de Ventas</h3>
+                                    </a>
+                                </div>
+                            </div>
                             <div class="br"></div>
                         </aside>
                     </div>
@@ -416,6 +665,9 @@ import avatarService from '@/services/avatarService';
 import cardService from '@/services/cardService';
 import addressService from '@/services/addressService';
 import purchaseService from '@/services/purchaseService';
+import productService from '@/services/productService';
+import categoryService from '@/services/categoryService';
+import brandService from '@/services/brandService';
 
 export default {
     data() {
@@ -424,6 +676,9 @@ export default {
             estadoDatos: null,
             estadoTarjeta: null,
             estadoDirecciones: null,
+            estadoUsuarios: null,
+            estadoProductos: null,
+            estadoReportes: null,
             personalData: [],
             images: [],
             cards: [],
@@ -447,7 +702,33 @@ export default {
                 suburb: null
             },
             agregarDireccion: false,
-            purchases: []
+            purchases: [],
+            users: [],
+            userToSearch: null,
+            isAdmin: null,
+            products: [],
+            productToSearch: null,
+            productsCategories: [],
+            productsBrands: [],
+            agregarProducto: null,
+            newProduct: {
+                name: null,
+                description: null,
+                price: null,
+                available_items: 10,
+                available: true,
+                flavor: null,
+                measure: null,
+                quantity: null,
+                filing: null,
+                brand: null,
+                category: null,
+                gallery: []
+            },
+            agregarCategoria: null,
+            newCategory: null,
+            agregarMarca: null,
+            newBrand: null
         }
     },
     created() {
@@ -465,12 +746,41 @@ export default {
             this.alertError('Primero logueate crack');
         }
     },
+    computed: {
+        userFiltered(){
+            var a = [];
+            if(this.userToSearch == ''){
+                a = [];
+            }
+            else{
+                a = this.users.filter(user => {
+                    return user.name.includes(this.userToSearch);
+                }); 
+            }
+            return a;
+        },
+        productFiltered(){
+            var a = [];
+            if(this.productToSearch == ''){
+                a = [];
+            }
+            else{
+                a = this.products.filter(product => {
+                    return product.name.includes(this.productToSearch);
+                }); 
+            }
+            return a;
+        }
+    },
     methods: {
         mostrarCompras() {
             this.estadoCompras = true;
             this.estadoDatos = false;
             this.estadoTarjeta = false;
             this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
         },
         mostrarDatos() {
             this.getAvatars();
@@ -478,6 +788,9 @@ export default {
             this.estadoDatos = true;
             this.estadoTarjeta = false;
             this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
         },
         mostrarPagos() {
             this.getCardsSaved();
@@ -485,6 +798,9 @@ export default {
             this.estadoDatos = false;
             this.estadoTarjeta = true;
             this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
         },
         mostrarDirecciones() {
             this.getAddresses();
@@ -492,9 +808,44 @@ export default {
             this.estadoDatos = false;
             this.estadoTarjeta = false;
             this.estadoDirecciones = true;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
+        },
+        mostrarProductos() {
+            this.getProducts();
+            this.estadoCompras = false;
+            this.estadoDatos = false;
+            this.estadoTarjeta = false;
+            this.estadoDirecciones = false;
+            this.estadoProductos = true;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
+        },
+        mostrarUsuarios() {
+            this.getUsers();
+            this.estadoCompras = false;
+            this.estadoDatos = false;
+            this.estadoTarjeta = false;
+            this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = true;
+            this.estadoReportes = false;
+        },
+        mostrarReportes() {
+            this.estadoCompras = false;
+            this.estadoDatos = false;
+            this.estadoTarjeta = false;
+            this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = true;
         },
         cerrarSesion(){
             window.localStorage.removeItem('tkn');
+            if(window.localStorage.get('cart')){
+                window.localStorage.removeItem('cart');
+            }
             router.push({
 				name: 'login',
 			});
@@ -592,12 +943,153 @@ export default {
             purchaseService.getPurchases(this.personalData._id, window.localStorage.getItem('tkn')).then(res => {
                 this.purchases = res.data;
             })
+        },
+        getUsers(){
+            userService.getAllUsers(window.localStorage.getItem('tkn')).then(res => {
+                this.users = res.data;
+            });
+        },
+        deleteUser(id){
+            if (this.personalData._id == id){
+                this.alertError('No te puedes borrar tu mismo gilipollas >:v');
+            }
+            else{
+                userService.deleteUser(id, window.localStorage.getItem('tkn')).then(()=>{
+                    this.alertSuccess('Usuario Eliminado correctamente');
+                    this.users = [];
+                    this.getUsers();
+                })
+            }
+        },
+        patchUserToAdmin(id, isAdmin){
+            var a = null;
+            if(isAdmin){
+                a = false;
+            }else{
+                a = true;
+            }
+            userService.patchUserToAdmin(id, a, window.localStorage.getItem('tkn')).then(() => {
+                this.alertSuccess('Rol Actualizado Correctamente');
+            })
+        },
+        getProducts(){
+            productService.get().then(res => {
+                this.products = res.data;
+            });
+            categoryService.get().then(res => {
+                this.productsCategories = res.data;
+            });
+            brandService.get().then(res => {
+                this.productsBrands = res.data;
+            })
+        },
+        updateProduct (id, name,description, price, available_items, available, flavor, measure, quantity, filing ,brand, category, gallery){
+            productService.update(id,name,description, price, available_items, available, flavor, measure, quantity, filing ,brand, category, gallery,window.localStorage.getItem('tkn')).then(() => {
+                this.alertSuccess('Producto Actualizado Correctamente');                
+            })
+        },
+        deleteProduct(id){
+            productService.delete(id, window.localStorage.getItem('tkn')).then(() => {
+                this.alertSuccess('Producto Eliminado Correctamente');
+                this.products = [];
+                this.getProducts();
+            })
+        },
+        createCategory(){
+            categoryService.createCategory(this.newCategory, window.localStorage.getItem('tkn')).then(res => {
+                this.newProduct.category = res.data._id;
+                this.alertSuccess('Categoría Agregada Correctamente');
+            })
+        },
+        createBrand(){
+            brandService.createBrand(this.newBrand, window.localStorage.getItem('tkn')).then(res => {
+                this.newProduct.brand = res.data._id;
+                this.alertSuccess('Marca Agregada Correctamente');
+            })
+        },
+        createProduct(){
+            if(this.newProduct.available && this.newProduct.available_items && this.newProduct.brand 
+            && this.newProduct.category && this.newProduct.description && this.newProduct.filing 
+            && this.newProduct.flavor && this.newProduct.gallery && this.newProduct.measure 
+            && this.newProduct.name && this.newProduct.price && this.newProduct.quantity){
+                productService.createProduct(this.newProduct, window.localStorage.getItem('tkn')).then(() => {
+                    this.alertSuccess('Producto Agregado Correctamente');
+                    this.products = [];
+                    this.getProducts();
+                    this.agregarCategoria = null;
+                    this.agregarMarca = null;
+                    this.agregarProducto = null;
+                    this.newProduct = {
+                        name: null,
+                        description: null,
+                        price: null,
+                        available_items: 10,
+                        available: true,
+                        flavor: null,
+                        measure: null,
+                        quantity: null,
+                        filing: null,
+                        brand: null,
+                        category: null,
+                        gallery: []
+                    };
+                })
+            }else{
+                this.alertError('Falta Algún Campo por Llenar');
+            }
         }
     },
 }
 </script>
 
 <style scoped>
+.full {
+    width: 100%;
+}
+.col-category {
+    max-width: 45%;
+    margin-right: 5px;
+}
+button.update-product-btn {
+    color: white;
+    background-color: #212831;
+    border: none;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+button.delete-user-btn {
+    color: white;
+    background-color: #d75a31;
+    border: none;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+img.avatars-user {
+    width: 150px;
+    transition-duration: 0.5s;
+}
+.row.blog_right_sidebar.middle {
+    min-width: 50%;
+}
+.midd-product-center {
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+}
+.midd-product {
+    align-items: center;
+    vertical-align: middle;
+    display: grid;
+}
+.midd {
+    align-items: center;
+    vertical-align: middle;
+    display: flex;
+}
 h5.green-color {
     color: #23a823;
 }

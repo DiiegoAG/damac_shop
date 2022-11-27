@@ -15,13 +15,26 @@ export default {
     getByBrand(id){
         return Service.get(resource + '/byBrand/' + id);
     },
-    create(data){
-        return Service.post(resource, data);
+    createProduct(data, token){
+        return Service.post(resource, data, { headers: {"Authorization" : `Bearer ${token}`} });
     },
-    delete(id){
-        return Service.delete(resource, id);
+    delete(id, token){
+        return Service.delete(resource + '/' + id, { headers: {"Authorization" : `Bearer ${token}`} });
     },
-    update(data){
-        return Service.put(resource, data);
+    update(id, name,description, price, available_items, available, flavor, measure, quantity, filing ,brand, category, gallery, token){
+        return Service.patch(resource + '/' + id, {
+            name: name,
+            description: description,
+            price: price,
+            available_items: available_items,
+            available: available,
+            flavor: flavor,
+            measure: measure,
+            quantity: quantity,
+            filing: filing,
+            brand: brand,
+            category: category,
+            gallery: gallery
+        }, { headers: {"Authorization" : `Bearer ${token}`} });
     }
 }

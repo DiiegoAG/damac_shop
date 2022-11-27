@@ -328,7 +328,7 @@ export default {
                     })
                 });
                 if (window.localStorage.getItem('tkn')) {
-                    const tiempoTranscurrido = new Date().toLocaleDateString('es-MX', { weekday: "long", year: "numeric", month: "short", day: "numeric" });
+                    const tiempoTranscurrido = new Date().toLocaleDateString('en-EU', { year: "numeric", month: "numeric", day: "numeric" });
                     purchaseService.newPurchase(VueJwtDecode.decode(window.localStorage.getItem('tkn')).userId, this.name, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(res => {
                         this.alertSuccess('Compra Realizada Correctamente');
                         this.clearAllData();
