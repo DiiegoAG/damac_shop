@@ -359,30 +359,32 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-12">
-                            <input type="text" v-model="userToSearch" class="form-control" placeholder="Nombre del Usuario" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'Nombre del Usuario'">
+                            <input type="text" v-model="userToSearch" class="form-control" placeholder="Nombre del Usuario"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del Usuario'">
                         </div>
                     </div>
                     <br>
                     <br>
                     <div v-for="user, index in userFiltered" :key="index">
-                        <div class="row blog_right_sidebar middle" >
-                        <div class="col-lg-4 col-md-4 col-sm-12 midd">
-                            <img class="avatars-user" :src="user.avatarId" alt="">
+                        <div class="row blog_right_sidebar middle">
+                            <div class="col-lg-4 col-md-4 col-sm-12 midd">
+                                <img class="avatars-user" :src="user.avatarId" alt="">
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-12">
+                                <h3>{{user.name}}</h3>
+                                <p>ID Usuario: {{user._id}}</p>
+                                <p>Correo: {{user.email}}</p>
+                                <p>Teléfono: {{user.phone}}</p>
+                                <span v-if="personalData._id!=user._id"><input type="checkbox" v-model="user.isAdmin"
+                                        v-on:click="patchUserToAdmin(user._id, user.isAdmin)"> ¿Administrador?</span>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 midd">
+                                <button class="delete-user-btn" v-on:click.prevent="deleteUser(user._id)"><span class="ti-trash ico-trash">
+                                        Eliminar Usuario</span></button>
+                            </div>
                         </div>
-                        <div class="col-lg-5 col-md-5 col-sm-12">
-                            <h3>{{user.name}}</h3>
-                            <p>ID Usuario: {{user._id}}</p>
-                            <p>Correo: {{user.email}}</p>
-                            <p>Teléfono: {{user.phone}}</p>
-                            <span v-if="personalData._id!=user._id"><input type="checkbox" v-model="user.isAdmin" v-on:click="patchUserToAdmin(user._id, user.isAdmin)"> ¿Administrador?</span>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 midd">
-                            <button class="delete-user-btn" v-on:click.prevent="deleteUser(user._id)"><span class="ti-trash ico-trash" > Eliminar Usuario</span></button>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
+                        <br>
+                        <br>
                     </div>
                 </div>
                 <!-- Administración de Productos -->
@@ -557,9 +559,12 @@
                                                             product.description, 
                                                             product.price, 
                                                             product.available_items, 
-                                                            product.available, product.flavor, 
-                                                            product.measure, product.quantity, 
-                                                            product.filing, product.brand._id, 
+                                                            product.available, 
+                                                            product.flavor, 
+                                                            product.measure, 
+                                                            product.quantity, 
+                                                            product.filing, 
+                                                            product.brand._id, 
                                                             product.category._id, 
                                                             product.gallery)"> Actualizar Producto</span></button>
                                 <br>
@@ -572,10 +577,84 @@
                     </div>
                 </div>
                 <!-- Reportes -->
-                <div class="col-lg-8 posts-list" v-if="estadoReportes">
+                <div class="col-lg-8 posts-list" v-show="estadoReportes">
                     <br><br>
                     <h1>Reportes</h1>
                     <br>
+                    <Reports></Reports>
+                </div>
+                <!-- Cupones -->
+                <div class="col-lg-8 posts-list" v-if="estadoCupones">
+                    <br><br>
+                    <h1>Administración de Productos</h1>
+                    <br>
+                    <button class="blue_btn" v-on:click="agregarCupon=true">Agregar Cupón</button>
+                    <br><br>
+                    <div class="row blog_right_sidebar middle" v-if="agregarCupon">
+                        <div class="col-lg-4 col-md-4 col-sm-12 midd-product-center">
+                            <img class="avatars-user" src="@/assets/img/user/cupon-ico.png" alt="">
+                            <br>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-12">
+                            <label>Nombre del Cupón</label>
+                            <input type="text" class="form-control" v-model="newCupon.name" placeholder="Nombre del Cupón"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del Cupón'">
+                            <br>
+                            <label>Porcentaje de Descuento</label>
+                            <input type="num" class="form-control" v-model="newCupon.percentaje" placeholder="Porcentaje de Descuento"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Porcentaje de Descuento'">
+                            <br>
+                            <label>Fecha de Caducidad</label>
+                            <input type="date" v-model="newCupon.expirate_date" class="form-control">
+                            <br>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 midd-product">
+                            <br>
+                            <button class="delete-user-btn" v-on:click="createCupon()"> Agregar Cupón</button>
+                            <br>
+                            <button class="update-product-btn" v-on:click="agregarCupon=false"> Cancelar</button>
+                        </div>
+                    </div>
+                    <br><br>
+                    <h3>Buscar Cupón</h3>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="text" v-model="cuponToSearch" class="form-control" placeholder="Nombre del Cupón"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del Cupón'">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div v-for="cupon, index in cuponFiltered" :key="index">
+                        <div class="row blog_right_sidebar middle">
+                            <div class="col-lg-4 col-md-4 col-sm-12 midd-product-center">
+                                <img class="avatars-user" src="@/assets/img/user/cupon-ico.png" alt="">
+                                <br>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <label>Nombre del Cupón</label>
+                                <input type="text" class="form-control" v-model="cupon.name" placeholder="Nombre del Cupón"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nombre del Cupón'">
+                                <br>
+                                <label>Porcentaje de Descuento</label>
+                                <input type="num" class="form-control" v-model="cupon.percentaje" placeholder="Porcentaje de Descuento"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Porcentaje de Descuento'">
+                                <br>
+                                <label>Fecha de Caducidad</label>
+                                <input type="date" v-model="cupon.expirate_date" class="form-control">
+                                <br>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 midd-product">
+                                <br>
+                                <button class="delete-user-btn" v-on:click="updateCupon(cupon)"> Actualizar Cupón</button>
+                                <br>
+                                <button class="update-product-btn" v-on:click="deleteCupon(cupon._id)"> Eliminar Cupón</button>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
                 </div>
                 <!-- Right Area - Perfil Info -->
                 <div class="col-lg-4">
@@ -638,6 +717,14 @@
                                 </div>
                             </div>
                             <div class="media post_item" v-if="personalData.isAdmin">
+                                <img class="user-ico-img" src="@/assets/img/user/cupons.png" alt="post">
+                                <div class="media-body">
+                                    <a href="" v-on:click.prevent="mostrarCupones">
+                                        <h3>Administración de Cupones</h3>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="media post_item" v-if="personalData.isAdmin">
                                 <img class="user-ico-img" src="@/assets/img/user/reports.png" alt="post">
                                 <div class="media-body">
                                     <a href="" v-on:click.prevent="mostrarReportes">
@@ -656,6 +743,7 @@
 </template>
 
 <script>
+
 import router from '@/router';
 import VueJwtDecode from 'vue-jwt-decode'
 import userService from '@/services/userService';
@@ -668,6 +756,8 @@ import purchaseService from '@/services/purchaseService';
 import productService from '@/services/productService';
 import categoryService from '@/services/categoryService';
 import brandService from '@/services/brandService';
+import cuponService from '@/services/cuponService';
+import Reports from '@/components/reportCharts.vue'
 
 export default {
     data() {
@@ -728,7 +818,16 @@ export default {
             agregarCategoria: null,
             newCategory: null,
             agregarMarca: null,
-            newBrand: null
+            newBrand: null,
+            estadoCupones: null,
+            newCupon: {
+                name: null,
+                percentaje: null,
+                expirate_date: null
+            },
+            agregarCupon: null,
+            cuponToSearch: '',
+            cupons: [],
         }
     },
     created() {
@@ -745,6 +844,9 @@ export default {
 			});
             this.alertError('Primero logueate crack');
         }
+    },
+    components: {
+        Reports,
     },
     computed: {
         userFiltered(){
@@ -770,10 +872,16 @@ export default {
                 }); 
             }
             return a;
-        }
+        },
+        cuponFiltered(){
+            return this.cupons.filter(cupon => {
+                    return cupon.name.includes(this.cuponToSearch);
+            });
+        },
     },
     methods: {
         mostrarCompras() {
+
             this.estadoCompras = true;
             this.estadoDatos = false;
             this.estadoTarjeta = false;
@@ -781,8 +889,10 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = false;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarDatos() {
+
             this.getAvatars();
             this.estadoCompras = false;
             this.estadoDatos = true;
@@ -791,8 +901,10 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = false;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarPagos() {
+
             this.getCardsSaved();
             this.estadoCompras = false;
             this.estadoDatos = false;
@@ -801,8 +913,10 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = false;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarDirecciones() {
+
             this.getAddresses();
             this.estadoCompras = false;
             this.estadoDatos = false;
@@ -811,8 +925,10 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = false;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarProductos() {
+
             this.getProducts();
             this.estadoCompras = false;
             this.estadoDatos = false;
@@ -821,8 +937,10 @@ export default {
             this.estadoProductos = true;
             this.estadoUsuarios = false;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarUsuarios() {
+
             this.getUsers();
             this.estadoCompras = false;
             this.estadoDatos = false;
@@ -831,8 +949,10 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = true;
             this.estadoReportes = false;
+            this.estadoCupones = false;
         },
         mostrarReportes() {
+
             this.estadoCompras = false;
             this.estadoDatos = false;
             this.estadoTarjeta = false;
@@ -840,6 +960,19 @@ export default {
             this.estadoProductos = false;
             this.estadoUsuarios = false;
             this.estadoReportes = true;
+            this.estadoCupones = false;
+        },
+        mostrarCupones() {
+
+            this.getCupons();
+            this.estadoCompras = false;
+            this.estadoDatos = false;
+            this.estadoTarjeta = false;
+            this.estadoDirecciones = false;
+            this.estadoProductos = false;
+            this.estadoUsuarios = false;
+            this.estadoReportes = false;
+            this.estadoCupones = true;
         },
         cerrarSesion(){
             window.localStorage.removeItem('tkn');
@@ -1037,12 +1170,53 @@ export default {
             }else{
                 this.alertError('Falta Algún Campo por Llenar');
             }
-        }
+        },
+        getCupons(){
+            cuponService.get().then(res => {
+                this.cupons = res.data;
+            })
+        },
+        updateCupon(data){
+            cuponService.updateCupon(data._id, data, window.localStorage.getItem('tkn')).then(() => {
+                this.alertSuccess('Cupón Actualizado Correctamente');
+            })
+        },
+        deleteCupon(id){
+            cuponService.deleteCupon(id, window.localStorage.getItem('tkn')).then(() => {
+                this.alertSuccess('Cupón Eliminado Correctamente');
+                this.cupons = [];
+                this.getCupons();
+            })
+        },
+        createCupon(){
+            if (this.newCupon.name && this.newCupon.expirate_date && this.newCupon.percentaje){
+                cuponService.createCupon(this.newCupon, window.localStorage.getItem('tkn')).then(() => {
+                    this.alertSuccess('Cupón Creado Correctamente');
+                    this.cupons = [];
+                    this.getCupons();
+                    this.agregarCupon = false;
+                    this.newCupon = {
+                        name: null,
+                        percentaje: null,
+                        expirate_date: null
+                    }
+                })
+            }else {
+                this.alertError('Faltan Campos por Llenar');
+            }
+        },
+        
     },
 }
 </script>
 
 <style scoped>
+.midd-product-center[data-v-4d74474a] {
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+    display: flex;
+}
 .full {
     width: 100%;
 }

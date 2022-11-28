@@ -8,5 +8,14 @@ export default {
     },
     get(){
         return Service.get(resource);
+    },
+    createCupon(data, token){
+        return Service.post(resource, data, { headers: {"Authorization" : `Bearer ${token}`} });
+    },
+    updateCupon(id, data, token){
+        return Service.patch(resource + '/' + id, data, { headers: {"Authorization" : `Bearer ${token}`} });
+    },
+    deleteCupon(id, token){
+        return Service.delete(resource + '/' + id, { headers: {"Authorization" : `Bearer ${token}`} });
     }
 }
