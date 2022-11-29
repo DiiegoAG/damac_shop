@@ -794,7 +794,7 @@ export default {
             agregarDireccion: false,
             purchases: [],
             users: [],
-            userToSearch: null,
+            userToSearch: '',
             isAdmin: null,
             products: [],
             productToSearch: null,
@@ -838,7 +838,6 @@ export default {
             this.getPurchases();
         });
         }else{
-            console.log("NO")
             router.push({
 				name: 'login',
 			});
@@ -850,16 +849,9 @@ export default {
     },
     computed: {
         userFiltered(){
-            var a = [];
-            if(this.userToSearch == ''){
-                a = [];
-            }
-            else{
-                a = this.users.filter(user => {
+                return this.users.filter(user => {
                     return user.name.includes(this.userToSearch);
                 }); 
-            }
-            return a;
         },
         productFiltered(){
             var a = [];
@@ -976,7 +968,7 @@ export default {
         },
         cerrarSesion(){
             window.localStorage.removeItem('tkn');
-            if(window.localStorage.get('cart')){
+            if(window.localStorage.getItem('cart')){
                 window.localStorage.removeItem('cart');
             }
             router.push({

@@ -1,6 +1,5 @@
 <template>
     <select class="form-control" v-model="reportToShow">
-                    <option value="Resumen">Resumen General</option>
                     <option value="Linea">Reporte por Año</option>
                     <option value="Barra">Reporte por Mes</option>
                 </select>

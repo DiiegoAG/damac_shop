@@ -2,25 +2,23 @@
     <footer class="footer-area section_gap">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3  col-md-6 col-sm-6">
+                <div class="col-lg-5  col-md-6 col-sm-6">
                     <div class="single-footer-widget">
                         <img src="@/assets/img/logobco.png" alt="logo">
                     </div>
                 </div>
-                <div class="col-lg-4  col-md-6 col-sm-6">
+                <div class="col-lg-5  col-md-6 col-sm-6">
                     <div class="single-footer-widget">
                         <h6>Newsletter</h6>
                         <p>Suscríbete para recibir promociones.</p>
                         <div class="" id="mc_embed_signup">
 
-                            <form target="_blank" novalidate="true"
-                                action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                method="get" class="form-inline">
+                            <form target="_blank" novalidate="true">
 
                                 <div class="d-flex flex-row">
 
-                                    <input class="form-control" name="EMAIL" placeholder="Enter Email"
-                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '"
+                                    <input class="form-control" placeholder="Email"
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'"
                                         required type="email">
 
 
@@ -38,21 +36,6 @@
                                 <div class="info"></div>
                             </form>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3  col-md-6 col-sm-6">
-                    <div class="single-footer-widget mail-chimp">
-                        <h6 class="mb-20">Galería de Fotos</h6>
-                        <ul class="instafeed d-flex flex-wrap">
-                            <li><img src="@/assets/img/i1.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i2.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i3.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i4.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i5.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i6.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i7.jpg" alt=""></li>
-                            <li><img src="@/assets/img/i8.jpg" alt=""></li>
-                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 col-sm-6">

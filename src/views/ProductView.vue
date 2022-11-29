@@ -33,7 +33,7 @@
 						<h2>${{product.price}}</h2>
 						<ul class="list">
 							<li><a class="active txt-md" href="#"><span>Categoría:</span> {{product.category.name}}</a></li>
-							<li><a class="active txt-md" href="#"><span>Unidades:</span> {{product.available_items}}</a></li>
+							<li><a class="active txt-md" href="#"><span>Disponible:</span> Si</a></li>
 						</ul>
                         <br>
                         <br>
@@ -241,6 +241,13 @@
 </script>
 
 <style scoped>
+.primary-btn {
+    background: #d65a31;
+    color: #fff !important;
+    margin-top: 20px;
+    border: none;
+    border-radius: 15px;
+}
     .owl-carousel .owl-item img {
     display: block;
     width: 100%;

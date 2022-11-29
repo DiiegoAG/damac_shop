@@ -6,7 +6,8 @@
 				<div class="col-first">
 					<h1>Sobre Nosotros</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<router-link to="/">Inicio<span class="lnr lnr-arrow-right"></span></router-link>
+						<router-link to="/contacto">Contacto</router-link>
 					</nav>
 				</div>
 			</div>

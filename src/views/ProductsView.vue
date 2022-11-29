@@ -6,7 +6,7 @@
 				<div class="col-first">
 					<h1>Productos</h1>
 					<nav class="d-flex align-items-center">
-						<router-link to="/productos">Inicio<span class="lnr lnr-arrow-right"></span></router-link>
+						<router-link to="/">Inicio<span class="lnr lnr-arrow-right"></span></router-link>
 						<router-link to="/contacto">Contacto</router-link>
 					</nav>
 				</div>
@@ -67,9 +67,9 @@ export default {
 		Product,
 	},
 	created() {
-		categoryService.get().then(categories => this.categories = categories.data).then(console.table(this.categories));
-		brandService.get().then(brands => this.brands = brands.data).then(console.table(this.brands));
-		productService.get().then(products => this.products = products.data).then(console.table(this.products));
+		categoryService.get().then(categories => this.categories = categories.data);
+		brandService.get().then(brands => this.brands = brands.data);
+		productService.get().then(products => this.products = products.data);
 	},
 	data() {
 		return {

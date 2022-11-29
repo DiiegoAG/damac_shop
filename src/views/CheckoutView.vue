@@ -109,11 +109,6 @@
                                     <br>
                                 </div>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <span v-if="isLogged"><input type="checkbox" v-model="saveAddress"> ¿Guardar Dirección?</span>
-                                </div>
-                            </div>
                         </form>
                         <br>
                         <!-- Métodos de pago -->
@@ -157,11 +152,6 @@
                                     <input type="text" class="form-control" v-model="newCard.expires_date" placeholder="12/25" onfocus="this.placeholder = ''"
                                         onblur="this.placeholder = '12/25'">
                                     <br>
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <span v-if="isLogged"><input type="checkbox" v-model="saveCard"> ¿Guardar Tarjeta?</span>
                                 </div>
                             </div>
                         </form>
@@ -328,7 +318,7 @@ export default {
                     })
                 });
                 if (window.localStorage.getItem('tkn')) {
-                    const tiempoTranscurrido = new Date().toLocaleDateString('en-EU', { year: "numeric", month: "numeric", day: "numeric" });
+                    const tiempoTranscurrido = new Date().toLocaleDateString('en-EU', {day: "numeric" , month: "numeric",year: "numeric" });
                     purchaseService.newPurchase(VueJwtDecode.decode(window.localStorage.getItem('tkn')).userId, this.name, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(res => {
                         this.alertSuccess('Compra Realizada Correctamente');
                         this.clearAllData();
@@ -338,7 +328,9 @@ export default {
                         });
                     });
                 } else {
-                    const tiempoTranscurrido = new Date().toLocaleDateString('es-MX', { weekday: "long", year: "numeric", month: "short", day: "numeric" });
+                    const tiempoTranscurrido = new Date().toLocaleDateString('en-EU', {day: "numeric" , month: "numeric",year: "numeric" });
+                    console.log(typeof(tiempoTranscurrido))
+                    console.log(tiempoTranscurrido)
                     purchaseService.newPurchaseNameless(this.name, this.addressSelected, this.total, this.discount, tiempoTranscurrido, 'Card', productsToSend, this.cardSelected, window.localStorage.getItem('tkn')).then(res => {
                         this.alertSuccess('Compra Realizada Correctamente');
                         this.clearAllData();
@@ -390,7 +382,7 @@ export default {
 <style>
 .primary-btn {
     background: #d65a31;
-    color: #fff;
+    color: #fff !important;
     margin-top: 20px;
     border: none;
     border-radius: 15px;

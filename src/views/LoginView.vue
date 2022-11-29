@@ -25,7 +25,7 @@
 						<div class="hover">
 							<h4>¿No tienes cuenta aún?</h4>
 							<p>Si realizas compras con una cuenta, podrás ver tu historial de compras y obtener algunos cupones de descuento.</p>
-							<a class="primary-btn" href="registration.html">Crear una Cuenta</a>
+							<router-link to="/registro" class="primary-btn">Crear una Cuenta</router-link>
 						</div>
 					</div>
 				</div>

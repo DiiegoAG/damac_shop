@@ -128,26 +128,30 @@
 		</div>
 	</section>
 	<!-- End category Area -->
-
-	<!-- start product Area -->
-	<section class=" section_gap">
-		<!-- single product slide -->
-		<div class="single-product-slider">
-			<div class="container">
-				<div class="row justify-content-center">
-					<div class="col-lg-6 text-center">
-						<div class="section-title">
-							<h1>Algunos Productos</h1>
-							<p>Revisa algunos de los productos que te ofrecemos, cuando quieras puedes visitar nuestra sección de <strong>Productos</strong> y revisar todos los que tenemos.</p>
-						</div>
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="" src="@/assets/img/freskiz.jpg" alt="">
 					</div>
 				</div>
-				<div class="row">
-					<Product column=3 :products=products></Product>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<img src="@/assets/img/logo.png" width="70%" alt="">
+						<br>
+						<p class="sample-text">
+							<strong>Diego, Andrés, Miguel, Alberto, Christian</strong>
+							<br>
+							<br>
+							Somos 6 amigos que comenzaron un negocio para generar ingresos, nuestra principal característica es que a pesar
+							de las circunstancias,
+							las malas situaciones y mal humor, siempre seguiremos siendo amigos.
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- single product slide -->
 	</section>
 	<!-- end product Area -->
 	<!-- Start brand Area -->
@@ -183,24 +187,18 @@
 	<!-- End brand Area -->
 </template>
 
-<script>
-import Product from '@/components/productsList.vue';
-import productService from '@/services/productService';
-
-export default {
-	name: 'home',
-	components: {
-		Product
-	},
-	data() {
-		return {
-			products: []
-		}
-	},
-	created (){
-		productService.get().then(products => this.products = products.data).then(console.table(this.products));
+<style scoped>
+h3{
+		color: #222831;
 	}
-}
-</script>
-
-
+	p {
+		font-size: 17px;
+	}
+	.login_box_area .login_box_img:before {
+    	background: #18090900;
+	}
+	.sample-text{
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+</style>

@@ -195,7 +195,6 @@ export default {
                 const productsCart = JSON.parse(window.localStorage.getItem('cart'));
                 //console.log(productsCart);
                 const cart = new Map(productsCart.map(product => [product._id, product]));
-                console.log(cart)
                 this.cart = cart;
             }
             else {
@@ -208,6 +207,7 @@ export default {
             this.updateStorage();
             this.loadCart();
             this.updateTotal();
+            this.alertSuccess('Carrito Actualizado')
         },
         updateStorage() {
             window.localStorage.setItem('cart', JSON.stringify(Array.from(this.cart.values())));
@@ -224,6 +224,8 @@ export default {
                 console.log(this.discount);
                 this.updateTotal();
                 this.alertSuccess('Cupón Aplicado Correctamente');
+            }).catch( () => {
+                    this.alertError('El Cupón NO Existe')
             });
         },
         alertSuccess(message) {
@@ -233,6 +235,19 @@ export default {
 					hideProgressBar: 'true',
 					position: 'top-right',
 					type: 'success',
+					transition: 'bounce',
+					showIcon: 'true',
+				}
+			);
+		},
+        alertError(message) {
+			createToast(message,
+				{
+					timeout: 3000,
+					toastBackgroundColor: '#c00000',
+					hideProgressBar: 'true',
+					position: 'top-right',
+					type: 'danger',
 					transition: 'bounce',
 					showIcon: 'true',
 				}
